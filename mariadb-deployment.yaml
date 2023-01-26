@@ -12,11 +12,16 @@ spec: # specification for deployment resource
       labels:
         app: mariadb # service will look for this label
     spec: # specification for pods
+      restartPolicy: Always
       containers: # we can have one or more containers
       - name: mariadb
         image: mariadb
         ports:
         - containerPort: 3306
+        env:
+        #- name: MARIADB_RANDOM_ROOT_PASSWORD
+        - name: MARIADB_ALLOW_EMPTY_ROOT_PASSWORD
+          value: "1" # if it is 1 and root_password is set, root_password takes precedance
         volumeMounts:
         - mountPath: "/var/lib/mysql"
           name: mariadb-storage
