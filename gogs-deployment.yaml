@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gogs-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: gogs
+  template:
+    metadata:
+      labels:
+        app: gogs
+    spec:
+      restartPolicy: Always
+      initContainers:
+      - name: wait-for-mariadb
+        image: busybox
+        command: ["sh", "-c", "until nc -z mariadb-service 3306; do echo waiting for mariadb; sleep 2; done"]
+      containers:
+      - name: gogs
+        image: infinityofcore/testgogs:latest
+        command: ["/bin/sh", "-c"]
+        args: ['sed -i "s/MARIADB_PASSWORD/$MARIADB_PASSWORD/g" /usr/local/bin/custom/conf/app.ini && gogs web']
+        ports:
+        - containerPort: 3000
+        envFrom:
+        - secretRef:
+            name: gogs-mariadb-secret
+        env:
+        - name: MARIADB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: gogs-mariadb-secret
+              key: gogs-mariadb-password
+        volumeMounts:
+          - mountPath: "/usr/local/bin/data"
+            name: gogs-storage
+      volumes:
+        - name: gogs-storage
+          persistentVolumeClaim:
+            claimName: gogs-persisent-volume-claim

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gogs-lb
+  labels:
+    app: gogs
+spec:
+  selector:
+    app: gogs
+  ports:
+  - name: http
+    port: 80
+    targetPort: 3000
+  type: LoadBalancer
