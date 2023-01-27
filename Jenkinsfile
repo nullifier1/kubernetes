@@ -17,7 +17,7 @@ node {
                         sh "git config user.name nullifier1"
                         //sh "git switch master"
                         sh "cat gogs-deployment.yaml"
-                        sh "sed -i 's+infinityofcore/testgogs.*+infinityofcore/testgogs:$CONTAINER_NUMBER+g' gogs-deployment.yaml"
+                        sh "sed -i 's+infinityofcore/testgogs.*+infinityofcore/testgogs:${env.CONTAINER_NUMBER}+g' gogs-deployment.yaml"
                         sh "cat gogs-deployment.yaml"
                         sh "git add ."
                         sh "git commit -m 'Done by Jenkins Job changemanifest: $CONTAINER_NUMBER'"
