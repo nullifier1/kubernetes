@@ -19,7 +19,7 @@ spec:
         command: ["sh", "-c", "until nc -z mariadb-service 3306; do echo waiting for mariadb; sleep 2; done"]
       containers:
       - name: gogs
-        image: infinityofcore/testgogs:env.BUILD_NUMBER
+        image: infinityofcore/testgogs:${env.BUILD_NUMBER}
         command: ["/bin/sh", "-c"]
         args: ['sed -i "s/MARIADB_PASSWORD/$MARIADB_PASSWORD/g" /usr/local/bin/custom/conf/app.ini && gogs web']
         ports:
