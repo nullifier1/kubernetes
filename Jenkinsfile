@@ -1,6 +1,6 @@
 node {
     def app
-
+    def containerNumber = sh(script: "cat /home/number", returnStdout: true).trim()
     stage('Clone repository') {
       
 
@@ -12,10 +12,9 @@ node {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         //def encodedPassword = URLEncoder.encode("$GIT_PASSWORD",'UTF-8')
-                        sh 'export CONTAINER_NUMBER=$(cat /home/number)'
+                        env.CONTAINER_NUMBER = containerNumber
                         sh "git config user.email infinityofcore@gmail.com"
                         sh "git config user.name nullifier1"
-                        env.CONTAINER_NUMBER = $(cat /home/number)
                         //sh "git switch master"
                         sh "cat gogs-deployment.yaml"
                         withEnv(["CONTAINER_NUMBER=${/home/number}"]) {
