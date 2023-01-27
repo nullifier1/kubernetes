@@ -15,6 +15,7 @@ node {
                         sh 'export CONTAINER_NUMBER=$(cat /home/number)'
                         sh "git config user.email infinityofcore@gmail.com"
                         sh "git config user.name nullifier1"
+                        env.CONTAINER_NUMBER = $(cat /home/number)
                         //sh "git switch master"
                         sh "cat gogs-deployment.yaml"
                         withEnv(["CONTAINER_NUMBER=${/home/number}"]) {
