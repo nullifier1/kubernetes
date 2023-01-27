@@ -12,7 +12,7 @@ node {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         //def encodedPassword = URLEncoder.encode("$GIT_PASSWORD",'UTF-8')
-                        sh 'export CONTAINER_NUMBER=$(cat /home/number)'
+                        sh 'export CONTAINER_NUMBER=${cat /home/number}'
                         sh "git config user.email infinityofcore@gmail.com"
                         sh "git config user.name nullifier1"
                         //sh "git switch master"
